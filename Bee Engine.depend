@@ -1,0 +1,111 @@
+<<<<<<< HEAD
+# depslib dependency file v1.0
+1506895949 source:g:\c++\code blocks\bee engine\main.cpp
+	<iostream>
+	"GameManager.h"
+
+1506877864 source:g:\c++\code blocks\bee engine\src\block.cpp
+	"Block.h"
+	"Object.h"
+
+1506888987 g:\c++\code blocks\bee engine\include\block.h
+	"Object.h"
+
+1506894517 source:g:\c++\code blocks\bee engine\src\object.cpp
+	"Object.h"
+	"Block.h"
+
+1506894431 g:\c++\code blocks\bee engine\include\object.h
+	<vector>
+	"Block.h"
+
+1506896102 source:g:\c++\code blocks\bee engine\src\screen.cpp
+	"Screen.h"
+	"Object.h"
+	"Resources.h"
+	<iostream>
+	<windows.h>
+	<ctime>
+
+1506895998 g:\c++\code blocks\bee engine\include\screen.h
+	"Object.h"
+	<vector>
+	<windows.h>
+	<ctime>
+
+1506866962 g:\c++\code blocks\bee engine\include\resources.h
+
+1506896523 source:g:\c++\code blocks\bee engine\src\gamemanager.cpp
+	"GameManager.h"
+	"Block.h"
+	"Object.h"
+	"Screen.h"
+	"Resources.h"
+	<fstream>
+	<vector>
+	<iostream>
+
+1506895961 g:\c++\code blocks\bee engine\include\gamemanager.h
+	"Block.h"
+	"Object.h"
+	"Screen.h"
+	"Resources.h"
+	<fstream>
+	<string>
+
+=======
+# depslib dependency file v1.0
+1506895949 source:g:\c++\code blocks\bee engine\main.cpp
+	<iostream>
+	"GameManager.h"
+
+1506877864 source:g:\c++\code blocks\bee engine\src\block.cpp
+	"Block.h"
+	"Object.h"
+
+1506888987 g:\c++\code blocks\bee engine\include\block.h
+	"Object.h"
+
+1506894517 source:g:\c++\code blocks\bee engine\src\object.cpp
+	"Object.h"
+	"Block.h"
+
+1506894431 g:\c++\code blocks\bee engine\include\object.h
+	<vector>
+	"Block.h"
+
+1506896102 source:g:\c++\code blocks\bee engine\src\screen.cpp
+	"Screen.h"
+	"Object.h"
+	"Resources.h"
+	<iostream>
+	<windows.h>
+	<ctime>
+
+1506895998 g:\c++\code blocks\bee engine\include\screen.h
+	"Object.h"
+	<vector>
+	<windows.h>
+	<ctime>
+
+1506866962 g:\c++\code blocks\bee engine\include\resources.h
+
+1506896523 source:g:\c++\code blocks\bee engine\src\gamemanager.cpp
+	"GameManager.h"
+	"Block.h"
+	"Object.h"
+	"Screen.h"
+	"Resources.h"
+	<fstream>
+	<vector>
+	<iostream>
+
+1506895961 g:\c++\code blocks\bee engine\include\gamemanager.h
+	"Block.h"
+	"Object.h"
+	"Screen.h"
+	"Resources.h"
+	<fstream>
+	<string>
+
+>>>>>>> e7b81b3e10ab08f13e59f52d2fb7314ad8273ae1

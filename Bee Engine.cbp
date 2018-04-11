@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Bee Engine" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/Bee Engine" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-Weffc++" />
+					<Add option="-Wall" />
+					<Add option="-std=c++14" />
+					<Add option="-pg" />
+					<Add option="-Og" />
+					<Add option="-g" />
+					<Add directory="include" />
+				</Compiler>
+				<Linker>
+					<Add option="-pg -lgmon" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/Bee Engine" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-fomit-frame-pointer" />
+					<Add option="-fexpensive-optimizations" />
+					<Add option="-O3" />
+					<Add directory="include" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-std=c++11" />
+			<Add option="-fexceptions" />
+			<Add directory="Dependencies/SDL2-2.0.7/i686-w64-mingw32/include" />
+			<Add directory="include" />
+		</Compiler>
+		<Linker>
+			<Add option="-lmingw32 -lSDL2main -lSDL2 -lSDL2_mixer -lSDL2_ttf" />
+			<Add directory="Dependencies/SDL2-2.0.7/i686-w64-mingw32/lib" />
+		</Linker>
+		<Unit filename="include/Bee.h" />
+		<Unit filename="include/Component.h" />
+		<Unit filename="include/Music.h" />
+		<Unit filename="include/Object.h" />
+		<Unit filename="include/Physics.h" />
+		<Unit filename="include/SoundEffect.h" />
+		<Unit filename="include/Sprite.h" />
+		<Unit filename="include/SquareCollider.h" />
+		<Unit filename="include/Transform.h" />
+		<Unit filename="include/Utility.h" />
+		<Unit filename="main.cpp" />
+		<Unit filename="src/Bee.cpp" />
+		<Unit filename="src/Component.cpp" />
+		<Unit filename="src/Music.cpp" />
+		<Unit filename="src/Object.cpp" />
+		<Unit filename="src/Physics.cpp" />
+		<Unit filename="src/SoundEffect.cpp" />
+		<Unit filename="src/Sprite.cpp" />
+		<Unit filename="src/SquareCollider.cpp" />
+		<Unit filename="src/Transform.cpp" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+			<DoxyBlocks>
+				<comment_style block="2" line="0" />
+				<doxyfile_project />
+				<doxyfile_build />
+				<doxyfile_warnings />
+				<doxyfile_output />
+				<doxyfile_dot />
+				<general />
+			</DoxyBlocks>
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
