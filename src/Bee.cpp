@@ -172,3 +172,10 @@ void Bee::addObject(Object* obj)
 }
 
 void Bee::removeObject(Object* obj)
+{
+    for(int i = 0; i < objectList.size(); ++i)
+        if(objectList[i] == obj)
+        {
+            objectList.erase(objectList.begin() + i);
+        }
+}

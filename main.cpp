@@ -9,7 +9,7 @@ using namespace std;
  *      -render text, optional: include loading custom font
 ***********************************************/
 
-Bee my_bee();
+Bee my_bee;
 
 class Bar
 {
@@ -19,31 +19,36 @@ class Bar
             if(id == 0)
             {
                 this->obj = new Object(0, 0);
+                this->obj->entityName = "player";
 
                 Sprite* s = new Sprite(obj);
                 s->loadImage(filename, Vector3(-1));
+                obj->addComponent(s);
 
                 Transform *t = getComponentFrom<Transform>(obj, "Transform");
                 t->coordX = 20;
-                t->coordY = screenHeight/2 + s->getHeight()/2;
-
-                Physics* p = new Physics(&obj);
-                obj->addComponent(p);
-
-                SquareCollider* sq = new SquareCollider(&obj);
-                obj->addComponent(sq);
+                t->coordY = screenHeight/2 - s->getHeight()/2;
             }
-            else
+            else if(id == 1)
             {
                 this->obj = new Object(0, 0);
+                 this->obj->entityName = "enemy";
 
                 Sprite* s = new Sprite(obj);
                 s->loadImage(filename, Vector3(-1));
+                obj->addComponent(s);
 
                 Transform *t = getComponentFrom<Transform>(obj, "Transform");
-                t->coordX = screenWidth - 20;
-                t->coordY = screenHeight/2 + s->getHeight()/2;
+                t->coordX = screenWidth - 20 - s->getWidth();
+                t->coordY = screenHeight/2 - s->getHeight()/2;
             }
+            else return;
+
+            Physics* p = new Physics(obj);
+            obj->addComponent(p);
+
+            SquareCollider* sq = new SquareCollider(obj);
+            obj->addComponent(sq);
         }
 
         ~Bar()
@@ -59,12 +64,11 @@ int main(int argc, char *argv[])
 {
     my_bee.createWindow(1000, 700, "Test");
 
-    Bar player(0, 1000, 700, "bar.bmp");
-    Bar enemy(1, 1000, 700, "bar.bmp");
+    Bar player(2, 1000, 700, "bar.bmp");
+    Bar enemy(1, 1000, 700, "bar2.bmp");
 
     Object obj2(500, 350);
 	obj2.entityName = "hey2";
-
 
     Sprite* s2 = new Sprite(&obj2);
     s2->loadImage("ball.bmp", Vector3(255, 255, 255));

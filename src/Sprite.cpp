@@ -13,7 +13,7 @@ Sprite::Sprite()	/**< Stub function for creating component */
 	this->id = 1;
 	this->name = "Sprite";
 
-	return; 		/**< @Todo: Find why does Sprite* s = new Sprite not work when added as component; Blank Fucking Screen !!!*/
+	return; 		/// @todo Find why does Sprite* s = new Sprite not work when added as component; Blank Fucking Screen !!!
 }
 
 Sprite::Sprite(void* parent)
