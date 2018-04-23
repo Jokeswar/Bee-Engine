@@ -69,6 +69,12 @@ struct Vector2
 		return result;
 	}
 
+	friend std::ostream& operator<<(std::ostream& os, Vector2 &v)
+	{
+		os << "X: " << v.x << " Y: " << v.y;
+		return os;
+	}
+
 	const bool operator==(const Vector2& that)
 	{
 		return ((this->x/that.x) == (this->y/that.y));
@@ -89,6 +95,12 @@ struct Point
 	float distanceTo(Point that)
 	{
 		return sqrt((this->x - that.x)*(this->x - that.x)  + (this->y - that.y)*(this->y - that.y));
+	}
+
+	friend std::ostream& operator<<(std::ostream& os, Point &p)
+	{
+		os << "X: " << p.x << " Y: " << p.y;
+		return os;
 	}
 };
 

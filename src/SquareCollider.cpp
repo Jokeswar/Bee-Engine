@@ -91,8 +91,7 @@ bool SquareCollider::collidedWith(SquareCollider* that)
 	Point DJ = {(float)(this->x + this->width), (float)(this->y + this->height)};	/**< Lower Right */
 	Point DJO = {(float)(that->getX() + that->getWidth()), (float)(that->getY() + that->getHeight())};
 
-	if(SS.x <= DJO.x && SS.y <= DJO.y &&	/**< Upper left corner */
-	   DJ.x >= SSO.x && SS.y <= DJO.y)		/**< Lower right corner */
+	if(!(SS.x > DJO.x || DJ.x < SSO.x || DJ.y < SSO.y || SS.y > DJO.y))
 		return true;
 
 	return false;
@@ -100,6 +99,8 @@ bool SquareCollider::collidedWith(SquareCollider* that)
 
 Vector2 SquareCollider::getCollisionNormal(SquareCollider* that)
 {
+	int mIndex = 0;
+
 	Point SS = {(float)this->x,(float)this->y};										/**< Upper Left */
 	Point DJ = {(float)(this->x + this->width), (float)(this->y + this->height)};	/**< Lower Right */
 	Point CenterOfGravity = {(SS.x + DJ.x)/2, (SS.y + DJ.y)/2};
@@ -107,13 +108,12 @@ Vector2 SquareCollider::getCollisionNormal(SquareCollider* that)
 	Point SSO = {(float)that->getX(), (float)that->getY()};
 	Point DJO = {(float)(that->getX() + that->getWidth()), (float)(that->getY() + that->getHeight())};
 
-	Point UpperFace = {(SSO.x + DJO.x)/2, SSO.y};
+	/*Point UpperFace = {(SSO.x + DJO.x)/2, SSO.y};
 	Point RightFace = {DJO.x, (SSO.y + DJO.y)/2};
 	Point LowerFace = {(SSO.x + DJO.x)/2, DJO.y};
-	Point LeftFace = {DJO.x, (SSO.y + DJO.y)/2};
+	Point LeftFace = {SSO.x, (SSO.y + DJO.y)/2};
 
 	float dist[4];
-	int mIndex = 0;
 
 	dist[0] = CenterOfGravity.distanceTo(UpperFace);
 	dist[1] = CenterOfGravity.distanceTo(RightFace);
@@ -121,18 +121,23 @@ Vector2 SquareCollider::getCollisionNormal(SquareCollider* that)
 	dist[3] = CenterOfGravity.distanceTo(LeftFace);
 
 	for(int i = 0; i < 4; ++i)
-		if(dist[i] < dist[mIndex]) mIndex = i;
+		if(dist[i] < dist[mIndex]) mIndex = i;*/
+
+	if(!(SS.x > DJO.x)) mIndex = 1;
+	else if(!(DJ.y < SSO.y)) mIndex = 0;
+	else if(!(DJ.x < SSO.x)) mIndex = 3;
+	else if(!(SS.y > DJO.y)) mIndex = 2;
 
 	switch(mIndex)
 	{
 	case 0:
-		return Vector2{0, 1};
+		return Vector2(0, 1);
 	case 1:
-		return Vector2{1, 0};
+		return Vector2(1, 0);
 	case 2:
-		return Vector2{0, -1};
+		return Vector2(0, -1);
 	case 3:
-		return Vector2{-1, 0};
+		return Vector2(-1, 0);
 	}
 
 	return Vector2(0, 0);

@@ -24,6 +24,7 @@ class Bar
                 Sprite* s = new Sprite(obj);
                 s->loadImage(filename, Vector3(-1));
                 obj->addComponent(s);
+                s->show = false;
 
                 Transform *t = getComponentFrom<Transform>(obj, "Transform");
                 t->coordX = 20;
@@ -32,7 +33,7 @@ class Bar
             else if(id == 1)
             {
                 this->obj = new Object(0, 0);
-                 this->obj->entityName = "enemy";
+                this->obj->entityName = "enemy";
 
                 Sprite* s = new Sprite(obj);
                 s->loadImage(filename, Vector3(-1));
@@ -45,6 +46,7 @@ class Bar
             else return;
 
             Physics* p = new Physics(obj);
+            p->isFixed = true;
             obj->addComponent(p);
 
             SquareCollider* sq = new SquareCollider(obj);
@@ -56,48 +58,100 @@ class Bar
             my_bee.removeObject(obj);
         }
 
+        void D_collider()
+        {
+            SquareCollider *sq = getComponentFrom<SquareCollider>(this->obj, "SquareCollider");
+            SDL_Rect r = {sq->getX(), sq->getY(), sq->getWidth(), sq->getHeight()};
+
+            SDL_SetRenderDrawColor(my_bee.game_window_renderer, 255, 0, 0, 255);
+            SDL_RenderDrawRect(my_bee.game_window_renderer, &r);
+            SDL_SetRenderDrawColor(my_bee.game_window_renderer, 0, 0, 0, 255);
+        }
+
+        void setSpeed(int value)
+        {
+            this->speed = value;
+        }
+
+        void update()
+        {
+            this->D_collider();
+            if(obj->entityName.compare("player") == 0) this->doMovement();
+        }
+
     private:
         Object *obj;
+        int speed = 150;
+
+        void doMovement()
+        {
+            Vector2 v;
+            if(my_bee.isKeyPressed("w") == true)
+            {
+                v = {0, -speed};    /**< SDL is top right-down based, so we go against common sense */
+            }
+            else if(my_bee.isKeyPressed("s") == true)
+            {
+                v = {0, +speed};
+            }
+            else
+            {
+                v = {0, 0};
+            }
+
+            getComponentFrom<Physics>(this->obj, "Physics")->setVelocity(v);
+
+        }
 };
+
+void DdrawSquareCollider(SquareCollider *sq)
+{
+    SDL_Rect r = {sq->getX(), sq->getY(), sq->getWidth(), sq->getHeight()};
+
+    SDL_SetRenderDrawColor(my_bee.game_window_renderer, 255, 0, 0, 255);
+    SDL_RenderDrawRect(my_bee.game_window_renderer, &r);
+    SDL_SetRenderDrawColor(my_bee.game_window_renderer, 0, 0, 0, 255);
+}
 
 int main(int argc, char *argv[])
 {
     my_bee.createWindow(1000, 700, "Test");
 
-    Bar player(2, 1000, 700, "bar.bmp");
-    Bar enemy(1, 1000, 700, "bar2.bmp");
+    Bar player(0, 1000, 700, "bar.bmp");
+    //Bar enemy(1, 1000, 700, "bar2.bmp");
 
-    Object obj2(500, 350);
-	obj2.entityName = "hey2";
+    Object upWall(0, 0);
+    upWall.entityName = "upWall";
+    SquareCollider* sqWall = new SquareCollider(&upWall);
+    Physics* p = new Physics(&upWall);
+    p->isFixed = true;
+    sqWall->setSize(1000, 10);
+    upWall.addComponent(sqWall);
+    upWall.addComponent(p);
 
-    Sprite* s2 = new Sprite(&obj2);
+    Object ball(100, 335);
+	ball.entityName = "ball";
+
+    Sprite* s2 = new Sprite(&ball);
     s2->loadImage("ball.bmp", Vector3(255, 255, 255));
-    obj2.addComponent(s2);
+    s2->show = false;
+    ball.addComponent(s2);
 
-    Physics* p2 = new Physics(&obj2);
-    obj2.addComponent(p2);
+    Physics* p2 = new Physics(&ball);
+    Vector2 v = {-20, 0};
+    p2->setVelocity(v);
+    ball.addComponent(p2);
 
-    SquareCollider* sq2 = new SquareCollider(&obj2);
-    obj2.addComponent(sq2);
+    SquareCollider* sq = new SquareCollider(&ball);
+    ball.addComponent(sq);
 
     while(my_bee.isKeyPressed("q") != 1)
     {
-        if(my_bee.isKeyPressed("w") == true)
-        {
-            Vector2 v = {0, 100};
+        DdrawSquareCollider(sq);
+        DdrawSquareCollider(sqWall);
 
-        }
-        else if(my_bee.isKeyPressed("s") == true)
-        {
-            Vector2 v = {0, -100};
-
-        }
-        else
-        {
-            Vector2 v = {0, 0};
-
-        }
-
+//        enemy.update();
+        player.update();
         my_bee.update();
     }
 

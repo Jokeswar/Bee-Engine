@@ -35,7 +35,6 @@ Physics::~Physics()
 void Physics::setVelocity(Vector2 vel)
 {
 	velocity = vel;
-	velocity.y = -velocity.y;	/**< SDL display coordinate is down-right based, for positive y, image goes down instead of up*/
 }
 
 Vector2 Physics::getVelocity()
@@ -46,7 +45,6 @@ Vector2 Physics::getVelocity()
 void Physics::setAcceleration(Vector2 acc)
 {
 	acceleration = acc;
-	acceleration.y = -acceleration.y;	/**< SDL display coordinate is down-right based, for positive y, image goes down instead of up*/
 }
 
 Vector2 Physics::getAcceleration()

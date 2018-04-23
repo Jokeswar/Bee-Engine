@@ -41,8 +41,8 @@ void Bee::update()
 	unsigned int frameStart = SDL_GetTicks();
 
     updateKeysPressed();	/**< User input */
+    checkCollision();       /**< Don't change their order!!!! */
     doPhysics();
-    checkCollision();
 
     for(unsigned int i = 0; i < objectList.size(); ++i)	/**< Objects update */
 		objectList[i]->update();
@@ -53,6 +53,7 @@ void Bee::update()
 	unsigned int frameEnd = SDL_GetTicks();		/**< VSync */
 	if(frameEnd - frameStart < 33)
 		SDL_Delay(33 - (frameEnd - frameStart));
+		//SDL_Delay(300);
 }
 
 void Bee::updateKeysPressed()
@@ -97,12 +98,19 @@ void Bee::solveCollision(Object* object1, Object* object2)
 	Vector2 relativeVelocity = p2->getVelocity() - p1->getVelocity();
 	Vector2 normal = sc1->getCollisionNormal(sc2);
 
-	float veloctiyAlongNormal = normal * relativeVelocity;
+	float velocityAlongNormal = normal * relativeVelocity;
 
-	if(veloctiyAlongNormal > 0)	/**< Separating anyway */
-		return;
+    if(p1->isFixed == true && p2->isFixed == false)
+    {
+        Vector2 v = p1->getVelocity() + normal * velocityAlongNormal * 2 * (-1) + p2->getVelocity();
+        Vector2 a = normal * velocityAlongNormal * 2 * (-1);
+        LOG(normal);
+        p2->setVelocity(v);
+        return;
+    }
+    else if(p1->isFixed == true && p2->isFixed == true) return;
 
-	float j = -(1 + e) * veloctiyAlongNormal;	/**< Impulse Scalar */
+	float j = -(1 + e) * velocityAlongNormal;	/**< Impulse Scalar */
 	j /= 1 / p1->mass + 1 / p2->mass;
 
 	Vector2 impulse = normal * j;
@@ -125,9 +133,15 @@ void Bee::checkCollision()
 				if(scObj1 != NULL && scObj2 != NULL)
 					if(scObj1->collidedWith(scObj2) == true)
                     {
-						solveCollision(objectList[i], objectList[j]);
+                        if(getComponentFrom<Physics>(objectList[i], "Physics")->isFixed == true)
+                            solveCollision(objectList[i], objectList[j]);
+                        else
+                            solveCollision(objectList[j], objectList[i]);
+
                         scObj1->onCollisionFunction(objectList[j]);
                         scObj2->onCollisionFunction(objectList[i]);
+                        LOG(objectList[i]->entityName);
+                        LOG(objectList[j]->entityName);
                     }
 			}
 }

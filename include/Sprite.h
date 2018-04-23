@@ -18,7 +18,9 @@ class Sprite: public Component
         int getWidth();
         int getHeight();
         void setNumberOfFrames(int);
-		void loadImage(const char*, Vector3);
+        void loadImage(const char*, Vector3);
+
+        bool show;
 
     private:
         SDL_Texture* texture;
