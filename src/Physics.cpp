@@ -11,6 +11,8 @@ Physics::Physics()
 	this->acceleration = {0.0, 0.0};
 	this->isFixed = false;
 	this->mass = 1.0;
+	this->impactRetentionCoefficient = 1.0;
+
 	return;
 }
 
@@ -24,6 +26,8 @@ Physics::Physics(void* parent)
 	this->acceleration = {0.0, 0.0};
 	this->isFixed = false;
 	this->mass = 1.0;
+	this->impactRetentionCoefficient = 1.0;
+
 	return;
 }
 
@@ -34,20 +38,20 @@ Physics::~Physics()
 
 void Physics::setVelocity(Vector2 vel)
 {
-	velocity = vel;
+	this->velocity = vel;
 }
 
 Vector2 Physics::getVelocity()
 {
-	return velocity;
+	return this->velocity;
 }
 
 void Physics::setAcceleration(Vector2 acc)
 {
-	acceleration = acc;
+	this->acceleration = acc;
 }
 
 Vector2 Physics::getAcceleration()
 {
-	return acceleration;
+	return this->acceleration;
 }

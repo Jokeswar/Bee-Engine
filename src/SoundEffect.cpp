@@ -8,6 +8,7 @@ SoundEffect::SoundEffect()
 	this->parentObject = NULL;
 
 	this->soundEffect = NULL;
+	this->isValid = true;
 	return;
 }
 
@@ -18,18 +19,29 @@ SoundEffect::SoundEffect(void* parent)
 	this->parentObject = parent;
 
 	this->soundEffect = NULL;
+	this->isValid = true;
 	return;
 }
 
 SoundEffect::~SoundEffect()
 {
 	Mix_FreeChunk(soundEffect);
-	soundEffect = NULL;
+	this->soundEffect = NULL;
 }
 
 void SoundEffect::loadSound(const char* filename)
 {
-	soundEffect = Mix_LoadWAV(filename);
+	this->soundEffect = Mix_LoadWAV(filename);
+
+	if(this->soundEffect == NULL)
+	{
+		LOG("Error loading sound effect file:");
+		LOG(SDL_GetError());
+		this->isValid = false;
+		return;
+	}
+
+	Mix_VolumeChunk(this->soundEffect, 128);
 }
 
 /// \brief Set's the volume
@@ -44,5 +56,6 @@ void SoundEffect::setVolume(char vol)
 
 void SoundEffect::play()
 {
-	Mix_PlayChannel(-1, soundEffect, 0);
+	if(this->isValid == true)
+		Mix_PlayChannel(-1, soundEffect, 0);
 }

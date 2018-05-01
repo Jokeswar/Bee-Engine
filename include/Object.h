@@ -38,6 +38,7 @@ class Object
 };
 
 /// For now it stays here until i figure the shitty function member
+/// @todo the class specific function doesn't link or smth goes wrong
 template<typename returnType>
 returnType* getComponentFrom(Object* obj, std::string name)
 {

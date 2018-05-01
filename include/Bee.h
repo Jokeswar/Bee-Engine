@@ -20,6 +20,7 @@ class Bee
 
         void addObject(Object*);
         void removeObject(Object*);
+        Object* getObject(std::string);
 
         static Bee* gameWorld; /**< Pointer to the newest created class */
 

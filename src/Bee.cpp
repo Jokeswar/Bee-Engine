@@ -13,7 +13,7 @@ Bee* Bee::gameWorld = NULL;
 Bee::Bee()
 {
     SDL_Init(SDL_INIT_EVERYTHING);
-	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024);	/**< Audio Initialization */
+	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024);	/**< Audio Initialization *SDL_mix.dll* */
 
     game_window = NULL;
     game_window_renderer = NULL;
@@ -53,7 +53,6 @@ void Bee::update()
 	unsigned int frameEnd = SDL_GetTicks();		/**< VSync */
 	if(frameEnd - frameStart < 33)
 		SDL_Delay(33 - (frameEnd - frameStart));
-		//SDL_Delay(300);
 }
 
 void Bee::updateKeysPressed()
@@ -87,13 +86,17 @@ bool Bee::isKeyReleased(const char* key)
 
 void Bee::solveCollision(Object* object1, Object* object2)
 {
-	float e = 1.0; /**< Energy Retention Coefficient */
+    float e = 0.0; /**< Energy Retention Coefficient. Is set as 0 to spot mistakes */
 
 	SquareCollider* sc1 = getComponentFrom<SquareCollider>(object1, "SquareCollider");
 	SquareCollider* sc2 = getComponentFrom<SquareCollider>(object2, "SquareCollider");
 
 	Physics* p1 = getComponentFrom<Physics>(object1, "Physics");
 	Physics* p2 = getComponentFrom<Physics>(object2, "Physics");
+
+	if(p1->isFixed == true && p2->isFixed == true) return;
+
+	e = (p1->impactRetentionCoefficient + p2->impactRetentionCoefficient)/2;
 
 	Vector2 relativeVelocity = p2->getVelocity() - p1->getVelocity();
 	Vector2 normal = sc1->getCollisionNormal(sc2);
@@ -103,12 +106,9 @@ void Bee::solveCollision(Object* object1, Object* object2)
     if(p1->isFixed == true && p2->isFixed == false)
     {
         Vector2 v = p1->getVelocity() + normal * velocityAlongNormal * 2 * (-1) + p2->getVelocity();
-        Vector2 a = normal * velocityAlongNormal * 2 * (-1);
-        LOG(normal);
         p2->setVelocity(v);
         return;
     }
-    else if(p1->isFixed == true && p2->isFixed == true) return;
 
 	float j = -(1 + e) * velocityAlongNormal;	/**< Impulse Scalar */
 	j /= 1 / p1->mass + 1 / p2->mass;
@@ -138,10 +138,8 @@ void Bee::checkCollision()
                         else
                             solveCollision(objectList[j], objectList[i]);
 
-                        scObj1->onCollisionFunction(objectList[j]);
-                        scObj2->onCollisionFunction(objectList[i]);
-                        LOG(objectList[i]->entityName);
-                        LOG(objectList[j]->entityName);
+                        scObj1->onCollisionFunction(objectList[i], objectList[j]);
+                        scObj2->onCollisionFunction(objectList[j], objectList[i]);
                     }
 			}
 }
@@ -178,6 +176,14 @@ void Bee::createWindow(int w, int h, const char* title)
 
     SDL_SetRenderDrawColor(game_window_renderer, 0x0, 0x0, 0x0, 0xFF);
     SDL_RenderClear(game_window_renderer);
+}
+
+Object* Bee::getObject(std::string name)
+{
+    for(int i = 0; i < objectList.size(); ++i)
+        if(objectList[i]->entityName.compare(name) == 0) return objectList[i];
+
+    return NULL;
 }
 
 void Bee::addObject(Object* obj)

@@ -8,6 +8,7 @@ Music::Music()	/**< Stub function for creating component */
 	this->parentObject = NULL;
 
 	this->music = NULL;
+	this->isValid = true;
 	return;
 }
 
@@ -18,6 +19,7 @@ Music::Music(void* parent)
 	this->parentObject = parent;	/**< Component specific initialization */
 
 	this->music = NULL;
+	this->isValid = true;
 	return;
 }
 
@@ -29,7 +31,15 @@ Music::~Music()
 
 void Music::loadMusic(const char* filename)
 {
-	music = Mix_LoadMUS(filename);
+	this->music = Mix_LoadMUS(filename);
+
+	if(this->music == NULL)
+	{
+		this->isValid = false;
+		LOG("Error loading music file:");
+		LOG(SDL_GetError());
+		return;
+	}
 }
 
 /// \brief Set's the volume

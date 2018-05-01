@@ -20,6 +20,8 @@ class Music: public Component
 		void restart();
 		void setVolume(char);
 
+		bool isValid;
+
     private:
     	Mix_Music *music;
 };

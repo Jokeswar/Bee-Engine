@@ -23,11 +23,13 @@ class SquareCollider: public Component
         bool collidedWith(SquareCollider*);
         Vector2 getCollisionNormal(SquareCollider*);
 
-        void (*onCollisionFunction)(Object*);
+        void (*onCollisionFunction)(Object*, Object*);
 
 	private:
 		int x;
 		int y;
+		int dx;
+		int dy;
 		int width;
 		int height;
 };

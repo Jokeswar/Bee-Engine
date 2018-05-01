@@ -16,6 +16,8 @@ class SoundEffect: public Component
 		void play();
 		void setVolume(char);
 
+		bool isValid;
+
 	private:
 		Mix_Chunk* soundEffect;
 };

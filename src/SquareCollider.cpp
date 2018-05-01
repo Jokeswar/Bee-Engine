@@ -2,13 +2,16 @@
 
 #include "Object.h"
 
-void onCollisionFunctionStub(Object* that){}    /**< So the engine's on collision call does not fail by calling a null pointer */
+void onCollisionFunctionStub(Object* thisObj, Object* thatObj){}    /**< So the engine's on collision call does not fail by calling a null pointer */
 
 SquareCollider::SquareCollider()	/**< Stub function for creating component */
 {
 	this->id = 2;
 	this->name = "SquareCollider";
 	onCollisionFunction = &onCollisionFunctionStub;
+
+	this->dx = 0;
+	this->dy = 0;
 
     return;
 }
@@ -19,6 +22,8 @@ SquareCollider::SquareCollider(void* parent)
 	this->name = "SquareCollider";
 	this->parentObject = parent;
 	this->onCollisionFunction = &onCollisionFunctionStub;
+	this->dx = 0;
+	this->dy = 0;
 
     /**<  Completing information for object */
 	Object* _parentObject = static_cast<Object*>(parent);
@@ -42,8 +47,8 @@ SquareCollider::SquareCollider(void* parent)
 
 void SquareCollider::move(int mx, int my)
 {
-	this->x = mx;
-	this->y = my;
+	this->dx = mx;
+	this->dy = my;
 }
 
 void SquareCollider::setSize(int w, int h)
@@ -59,8 +64,8 @@ void SquareCollider::update()
 	Object* _parentObject = static_cast<Object*>(this->parentObject);
 	Transform *t = getComponentFrom<Transform>(_parentObject, "Transform");
 
-	this->x = t->coordX;
-    this->y = t->coordY;
+	this->x = t->coordX + this->dx;
+    this->y = t->coordY + this->dy;
 }
 
 int SquareCollider::getX()
@@ -99,45 +104,35 @@ bool SquareCollider::collidedWith(SquareCollider* that)
 
 Vector2 SquareCollider::getCollisionNormal(SquareCollider* that)
 {
-	int mIndex = 0;
+	int mIndex = 4;
+	int dist[5];
 
 	Point SS = {(float)this->x,(float)this->y};										/**< Upper Left */
 	Point DJ = {(float)(this->x + this->width), (float)(this->y + this->height)};	/**< Lower Right */
-	Point CenterOfGravity = {(SS.x + DJ.x)/2, (SS.y + DJ.y)/2};
 
 	Point SSO = {(float)that->getX(), (float)that->getY()};
 	Point DJO = {(float)(that->getX() + that->getWidth()), (float)(that->getY() + that->getHeight())};
 
-	/*Point UpperFace = {(SSO.x + DJO.x)/2, SSO.y};
-	Point RightFace = {DJO.x, (SSO.y + DJO.y)/2};
-	Point LowerFace = {(SSO.x + DJO.x)/2, DJO.y};
-	Point LeftFace = {SSO.x, (SSO.y + DJO.y)/2};
+	dist[0] = abs(SS.x - DJO.x);
+	dist[1] = abs(SSO.x - DJ.x);
+	dist[2] = abs(SS.y - DJO.y);
+	dist[3] = abs(DJ.y - SSO.y);
+	dist[4] = 2e30;	/**< Impossible value to attain, just for calculating the minimal distance */
 
-	float dist[4];
+	for(int i = 0; i <= 3; ++i)
+		if(dist[i] < dist[mIndex]) mIndex = i;
 
-	dist[0] = CenterOfGravity.distanceTo(UpperFace);
-	dist[1] = CenterOfGravity.distanceTo(RightFace);
-	dist[2] = CenterOfGravity.distanceTo(LowerFace);
-	dist[3] = CenterOfGravity.distanceTo(LeftFace);
-
-	for(int i = 0; i < 4; ++i)
-		if(dist[i] < dist[mIndex]) mIndex = i;*/
-
-	if(!(SS.x > DJO.x)) mIndex = 1;
-	else if(!(DJ.y < SSO.y)) mIndex = 0;
-	else if(!(DJ.x < SSO.x)) mIndex = 3;
-	else if(!(SS.y > DJO.y)) mIndex = 2;
 
 	switch(mIndex)
 	{
 	case 0:
-		return Vector2(0, 1);
+		return Vector2(-1, 0);
 	case 1:
 		return Vector2(1, 0);
 	case 2:
 		return Vector2(0, -1);
 	case 3:
-		return Vector2(-1, 0);
+		return Vector2(0, 1);
 	}
 
 	return Vector2(0, 0);

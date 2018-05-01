@@ -21,6 +21,7 @@ class Sprite: public Component
         void loadImage(const char*, Vector3);
 
         bool show;
+        bool isValid;
 
     private:
         SDL_Texture* texture;

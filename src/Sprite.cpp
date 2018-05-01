@@ -13,6 +13,7 @@ Sprite::Sprite()	/**< Stub function for creating component */
 	this->id = 1;
 	this->name = "Sprite";
 	this->show = true;
+	this->isValid = true;
 
 	return; 		/// @todo Find why does Sprite* s = new Sprite not work when added as component; Blank Fucking Screen !!!
 }
@@ -27,6 +28,7 @@ Sprite::Sprite(void* parent)
     this->currentFrame = 0;
     this->numberOfFrames = 1;
     this->show = true;
+    this->isValid = true;
 }
 
 Sprite::~Sprite()
@@ -43,35 +45,43 @@ void Sprite::loadImage(const char* filename, Vector3 colorKey)
 {
     SDL_Surface* surface = SDL_LoadBMP(filename);
 
+    if(surface == NULL)
+    {
+        this->isValid = false;
+        LOG("Error loading sprite file:");
+        LOG(SDL_GetError());
+        return;
+    }
+
     if(colorKey.x != -1)
 		SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format, (Uint8)colorKey.x, (Uint8)colorKey.y, (Uint8)colorKey.z));
 
     texture = SDL_CreateTextureFromSurface(Bee::gameWorld->game_window_renderer, surface);
 
-    imageWidth = surface->w;
-    imageHeight = surface->h;
+    this->imageWidth = surface->w;
+    this->imageHeight = surface->h;
 
     SDL_FreeSurface(surface);
 }
 
 int Sprite::getHeight()
 {
-    return imageHeight;
+    return this->imageHeight;
 }
 
 int Sprite::getWidth()
 {
-    return imageWidth;
+    return this->imageWidth;
 }
 
 void Sprite::setNumberOfFrames(int x)
 {
-    numberOfFrames = x;
+    this->numberOfFrames = x;
 }
 
 void Sprite::update()
 {
-    if(show == true)
+    if(this->show == true && this->isValid == true)
     {
         Object* obj = static_cast<Object*>(this->parentObject);
         Transform* t = getComponentFrom<Transform>(obj, "Transform");

@@ -14,7 +14,6 @@ class Transform: public Component
 
 		float angle;
 
-		/**< Scale is between 0 and 1, 1 - original size, 0 - doesn't appear on the screen */
 		float scaleX;
 		float scaleY;
 };

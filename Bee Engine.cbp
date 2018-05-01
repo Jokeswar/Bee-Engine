@@ -43,12 +43,12 @@
 		<Compiler>
 			<Add option="-std=c++11" />
 			<Add option="-fexceptions" />
-			<Add directory="Dependencies/SDL2-2.0.7/i686-w64-mingw32/include" />
+			<Add directory="dependencies/SDL2-2.0.7/i686-w64-mingw32/include" />
 			<Add directory="include" />
 		</Compiler>
 		<Linker>
 			<Add option="-lmingw32 -lSDL2main -lSDL2 -lSDL2_mixer -lSDL2_ttf" />
-			<Add directory="Dependencies/SDL2-2.0.7/i686-w64-mingw32/lib" />
+			<Add directory="dependencies/SDL2-2.0.7/i686-w64-mingw32/lib" />
 		</Linker>
 		<Unit filename="include/Bee.h" />
 		<Unit filename="include/Component.h" />

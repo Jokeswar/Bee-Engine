@@ -51,7 +51,7 @@ void Object::addComponent(Component* current)
 {
  	componenets.push_back(current);
 }
-///@todo The linker has a few problems, it says that the function with random type(i.e. template argument) is undefined
+
 template<typename returnType>
 returnType* Object::getComponent(unsigned int id)
 {
@@ -61,8 +61,8 @@ returnType* Object::getComponent(unsigned int id)
 	return NULL;
 }
 
- template<typename returnType>
- returnType* Object::getComponent(std::string name)
+template<typename returnType>
+returnType* Object::getComponent(std::string name)
 {
  	for(unsigned int i = 0; i < componenets.size(); ++i)
 		if(componenets[i]->name.compare(name) == 0) return static_cast<returnType*>(componenets[i]);
