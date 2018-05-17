@@ -30,7 +30,7 @@ class Object
 
         void update();
 
-		std::vector<Component*> componenets;
+		std::vector<Component*> components;
 		std::string entityName;
 
     private:
@@ -42,8 +42,8 @@ class Object
 template<typename returnType>
 returnType* getComponentFrom(Object* obj, std::string name)
 {
- 	for(unsigned int i = 0; i < obj->componenets.size(); ++i)
-		if(obj->componenets[i]->name.compare(name) == 0) return static_cast<returnType*>(obj->componenets[i]);
+ 	for(unsigned int i = 0; i < obj->components.size(); ++i)
+		if(obj->components[i]->name.compare(name) == 0) return static_cast<returnType*>(obj->components[i]);
 
 	return NULL;
 }

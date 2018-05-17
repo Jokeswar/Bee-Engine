@@ -6,6 +6,7 @@
 #include "SquareCollider.h"
 
 #include <SDL2/SDL.h>
+#include <thread>
 
 class Bee
 {
@@ -22,10 +23,11 @@ class Bee
         void removeObject(Object*);
         Object* getObject(std::string);
 
-        static Bee* gameWorld; /**< Pointer to the newest created class */
+        static Bee* gameWorld;  /**< Pointer to the newest created class */
 
         SDL_Window* game_window;
         SDL_Renderer* game_window_renderer;
+        bool alive;
 
     private:
         void updateKeysPressed();
@@ -37,6 +39,7 @@ class Bee
         bool keysReleased[SDL_NUM_SCANCODES];
 
         std::vector<Object*> objectList;
+       // std::thread physics;
 };
 
 #endif // BEE_H

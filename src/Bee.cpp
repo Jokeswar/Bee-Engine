@@ -15,12 +15,15 @@ Bee::Bee()
     SDL_Init(SDL_INIT_EVERYTHING);
 	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024);	/**< Audio Initialization *SDL_mix.dll* */
 
-    game_window = NULL;
-    game_window_renderer = NULL;
+    this->game_window = NULL;
+    this->game_window_renderer = NULL;
 
-	gameWorld = this;
+	this->gameWorld = this;
     memset(keysPressed, 0, sizeof(keysPressed));
     memset(keysPressed, 0, sizeof(keysReleased));
+
+    //this->physics = std::thread(&Bee::doPhysics, this);
+    this->alive = true;
 }
 
 Bee::~Bee()
@@ -28,12 +31,13 @@ Bee::~Bee()
 	Mix_CloseAudio();
 
     SDL_DestroyWindow(game_window);
-    game_window = NULL;
+    this->game_window = NULL;
 
     SDL_DestroyRenderer(game_window_renderer);
-    game_window_renderer = NULL;
+    this->game_window_renderer = NULL;
 
     SDL_Quit();
+   // this->physics.join();
 }
 
 void Bee::update()
@@ -146,27 +150,32 @@ void Bee::checkCollision()
 
 void Bee::doPhysics()
 {
-	for(unsigned int i = 0; i < objectList.size(); ++i)
-	{
-        Object* currentObj = objectList[i];
+   // while(this->alive == true)
+    //{
+        for(unsigned int i = 0; i < objectList.size(); ++i)
+        {
+            Object* currentObj = objectList[i];
 
-		Transform* t = getComponentFrom<Transform>(currentObj, "Transform");
-		Physics* p = getComponentFrom<Physics>(currentObj, "Physics");
+            Transform* t = getComponentFrom<Transform>(currentObj, "Transform");
+            Physics* p = getComponentFrom<Physics>(currentObj, "Physics");
 
-		if(p != nullptr)
-		{
-			Vector2 vel = p->getVelocity();
-			Vector2 acc = p->getAcceleration();
+            if(p != nullptr)
+            {
+                Vector2 vel = p->getVelocity();
+                Vector2 acc = p->getAcceleration();
 
-			t->coordX = t->coordX + vel.x * TIMESTEP + 0.5 * acc.x * TIMESTEP * TIMESTEP;
-			t->coordY = t->coordY + vel.y * TIMESTEP + 0.5 * acc.y * TIMESTEP * TIMESTEP;
+                t->coordX = t->coordX + vel.x * TIMESTEP + 0.5 * acc.x * TIMESTEP * TIMESTEP;
+                t->coordY = t->coordY + vel.y * TIMESTEP + 0.5 * acc.y * TIMESTEP * TIMESTEP;
 
-			vel.x = vel.x + acc.x * TIMESTEP;
-			vel.y = vel.y + acc.y * TIMESTEP;
+                vel.x = vel.x + acc.x * TIMESTEP;
+                vel.y = vel.y + acc.y * TIMESTEP;
 
-			p->setVelocity(vel);
-		}
-	}
+                p->setVelocity(vel);
+            }
+        }
+        //this->checkCollision();
+        //SDL_Delay(10);
+   // }
 }
 
 void Bee::createWindow(int w, int h, const char* title)
@@ -180,7 +189,7 @@ void Bee::createWindow(int w, int h, const char* title)
 
 Object* Bee::getObject(std::string name)
 {
-    for(int i = 0; i < objectList.size(); ++i)
+    for(unsigned int i = 0; i < objectList.size(); ++i)
         if(objectList[i]->entityName.compare(name) == 0) return objectList[i];
 
     return NULL;
@@ -193,7 +202,7 @@ void Bee::addObject(Object* obj)
 
 void Bee::removeObject(Object* obj)
 {
-    for(int i = 0; i < objectList.size(); ++i)
+    for(unsigned int i = 0; i < objectList.size(); ++i)
         if(objectList[i] == obj)
         {
             objectList.erase(objectList.begin() + i);

@@ -33,14 +33,14 @@ Object::~Object()
 {
 	numberOfObjects--;
 
-    for(unsigned int i = 0; i < componenets.size(); ++i)
-		delete componenets[i];
+    for(unsigned int i = 0; i < components.size(); ++i)
+		delete components[i];
 }
 
 void Object::update()
 {
-	for(unsigned int i = 0; i < componenets.size(); ++i)
-		componenets[i]->update();
+	for(unsigned int i = 0; i < components.size(); ++i)
+		components[i]->update();
 }
 
 /********************************************//**
@@ -49,14 +49,14 @@ void Object::update()
 
 void Object::addComponent(Component* current)
 {
- 	componenets.push_back(current);
+ 	components.push_back(current);
 }
 
 template<typename returnType>
 returnType* Object::getComponent(unsigned int id)
 {
- 	for(unsigned int i = 0; i < componenets.size(); ++i)
-		if(componenets[i]->id == id) return static_cast<returnType*>(componenets[i]);
+ 	for(unsigned int i = 0; i < components.size(); ++i)
+		if(components[i]->id == id) return static_cast<returnType*>(components[i]);
 
 	return NULL;
 }
@@ -64,8 +64,8 @@ returnType* Object::getComponent(unsigned int id)
 template<typename returnType>
 returnType* Object::getComponent(std::string name)
 {
- 	for(unsigned int i = 0; i < componenets.size(); ++i)
-		if(componenets[i]->name.compare(name) == 0) return static_cast<returnType*>(componenets[i]);
+ 	for(unsigned int i = 0; i < components.size(); ++i)
+		if(components[i]->name.compare(name) == 0) return static_cast<returnType*>(components[i]);
 
 	return NULL;
 }

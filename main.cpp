@@ -223,6 +223,14 @@ class Ball
         Vector2 initialPos;
 };
 
+int sgn(int x)
+{
+    if(x > 0) return 1;
+    if(x < 0) return -1;
+
+    return 0;
+}
+
 void ballCollision(Object* thisObj, Object* thatObj)
 {
     if(thatObj->entityName.compare("player") == 0 || thatObj->entityName.compare("enemy") == 0)
@@ -232,7 +240,7 @@ void ballCollision(Object* thisObj, Object* thatObj)
     Vector2 myVelocity = p->getVelocity();
 
     if(abs(myVelocity.x) < 500) myVelocity.x *= 1.1;
-    if(abs(myVelocity.y) > 400) myVelocity.y  = 400;
+    if(abs(myVelocity.y) > 400) myVelocity.y  = 400 * sgn(myVelocity.y);
     p->setVelocity(myVelocity);
 }
 
@@ -302,6 +310,6 @@ int main(int argc, char *argv[])
         player.update();
         my_bee.update();
     }
-
+    my_bee.alive = false;
     return 0;
 }
